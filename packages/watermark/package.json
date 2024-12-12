@@ -1,0 +1,14 @@
+{
+  "name": "watermark",
+  "version": "1.0.0",
+  "description": "水印，支持图片和文字",
+  "main": "index.ts",
+  "license": "ISC",
+  "keywords": [
+    "watermark",
+    "水印",
+    "图片水印",
+    "文字水印"
+  ],
+  "types": "module"
+}
