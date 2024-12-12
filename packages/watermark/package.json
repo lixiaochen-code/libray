@@ -1,14 +1,25 @@
 {
-  "name": "watermark",
+  "name": "@rain688/watermark",
   "version": "1.0.0",
   "description": "水印，支持图片和文字",
   "main": "index.ts",
+  "author": "lixiaochen",
   "license": "ISC",
   "keywords": [
     "watermark",
+    "Image watermark",
+    "Text watermark",
     "水印",
     "图片水印",
     "文字水印"
   ],
-  "types": "module"
+  "types": "module",
+  "repository": "https://github.com/lixiaochen-code/libray.git",
+  "bugs": {
+    "url": "https://github.com/lixiaochen-code/libray/issues"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  }
 }
