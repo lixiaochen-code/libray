@@ -37,11 +37,15 @@ type BaseOptions = {
 
 export class Watermark<T extends string | HTMLImageElement = string> {
   canvas: HTMLCanvasElement
+  #parentElement?: HTMLElement
   options: Required<BaseOptions> & { imgInfo?: { width: number; height: number } }
   context?: CanvasRenderingContext2D
   resizeObserver?: ResizeObserver
   constructor(canvas: HTMLCanvasElement, options: BaseOptions) {
     this.canvas = canvas
+    if (canvas.parentElement) {
+      this.#parentElement = canvas.parentElement
+    }
     const {
       content,
       rotate = 45,
@@ -98,11 +102,12 @@ export class Watermark<T extends string | HTMLImageElement = string> {
     this.draw()
 
     if (this.options.resizeRender) {
-      this.startResizeObserver()
+      this.#startResizeObserver()
     }
+    this.#startMutationObserver()
   }
 
-  startResizeObserver() {
+  #startResizeObserver() {
     this.resizeObserver = new ResizeObserver((values) => {
       const value = values[0]
       if (value) {
@@ -114,6 +119,33 @@ export class Watermark<T extends string | HTMLImageElement = string> {
       }
     })
     this.resizeObserver.observe(this.canvas)
+  }
+
+  #startMutationObserver() {
+    const callback: MutationCallback = (mutationsList) => {
+      for (const mutation of mutationsList) {
+        if (mutation.type === 'childList') {
+          const { addedNodes, removedNodes, target } = mutation
+          if (target === this.canvas) {
+            console.log(mutation)
+            addedNodes.forEach((item) => (item as Element).remove())
+          }
+          if (target === this.#parentElement) {
+            removedNodes.forEach((item) => {
+              if (item === this.canvas) {
+                this.#parentElement?.appendChild(this.canvas)
+              }
+            })
+          }
+        }
+      }
+    }
+    const observer = new MutationObserver(callback)
+    observer.observe(this.canvas, { attributes: false, childList: true, subtree: false })
+
+    if (this.#parentElement) {
+      observer.observe(this.#parentElement, { attributes: false, childList: true, subtree: false })
+    }
   }
 
   clearResizeObserver() {
