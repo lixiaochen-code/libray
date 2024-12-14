@@ -14,7 +14,6 @@ onMounted(() => {
   if (canvas) {
     const img = document.createElement('img')
     img.src = logo
-    console.log('img', img)
     img.style.opacity = '0.1'
     img.onload = () => {
       new Watermark(canvas, {
