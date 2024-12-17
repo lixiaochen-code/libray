@@ -13,11 +13,11 @@ type BaseOptions = {
    */
   color?: string
   /**
-   * 水印宽度
+   * canvas宽度
    */
   width?: number
   /**
-   * 水印高度
+   * canvas高度
    */
   height?: number
   /**
@@ -32,6 +32,13 @@ type BaseOptions = {
    * 是否在窗口大小改变时重新渲染
    */
   resizeRender?: boolean
+  /**
+   * 是否更清楚
+   */
+  isHD?: boolean
+  /**
+   * 图片信息
+   */
   imgInfo?: { width: number; height: number; opacity?: number }
 }
 
@@ -59,6 +66,7 @@ export class Watermark<T extends string | HTMLImageElement = string> {
         height: 0,
         opacity: 1,
       },
+      isHD = false,
     } = options
     if (content instanceof HTMLImageElement) {
       if (!imgInfo.width || !imgInfo.height) {
@@ -70,8 +78,8 @@ export class Watermark<T extends string | HTMLImageElement = string> {
     let { width, height } = options
     if (!width || !height) {
       const { width: oWidth, height: oHeight } = canvas.getBoundingClientRect()
-      width = width || oWidth
-      height = height || oHeight
+      width = (width || oWidth) * (isHD ? 2 : 1)
+      height = (height || oHeight) * (isHD ? 2 : 1)
 
       canvas.width = width
       canvas.height = height
@@ -87,6 +95,7 @@ export class Watermark<T extends string | HTMLImageElement = string> {
       yGap,
       resizeRender,
       imgInfo,
+      isHD,
     }
     const context = canvas.getContext('2d')
 
@@ -112,9 +121,9 @@ export class Watermark<T extends string | HTMLImageElement = string> {
       const value = values[0]
       if (value) {
         const { width, height } = value.contentRect
-        this.canvas.width = width
-        this.canvas.height = height
-        this.context!.clearRect(0, 0, width, height)
+        this.canvas.width = width * (this.options.isHD ? 2 : 1)
+        this.canvas.height = height * (this.options.isHD ? 2 : 1)
+        this.context!.clearRect(0, 0, this.canvas.width, this.canvas.height)
         this.draw()
       }
     })
@@ -161,9 +170,6 @@ export class Watermark<T extends string | HTMLImageElement = string> {
     if (content instanceof HTMLImageElement) {
       this.#drowImage()
     } else {
-      /**
-       * 水印内容
-       */
       this.#drowText()
     }
   }

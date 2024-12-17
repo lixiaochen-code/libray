@@ -17,15 +17,12 @@ onMounted(() => {
     img.style.opacity = '0.1'
     img.onload = () => {
       new Watermark(canvas, {
-        content: img,
-        xGap: 150,
-        yGap: 150,
+        content: '水印',
+        xGap: 100,
+        yGap: 100,
         rotate: -45,
-        imgInfo: {
-          width: 100,
-          height: 100,
-          opacity: 0.1,
-        },
+        color: 'rgba(0, 0, 0, 0.1)',
+        font: '40px Arial',
       })
     }
   }
