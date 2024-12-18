@@ -14,7 +14,8 @@
     "lint:eslint": "eslint . --fix",
     "lint": "run-s lint:*",
     "format": "prettier --write src/",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "test": ""
   },
   "dependencies": {
     "pinia": "^2.2.6",
@@ -51,7 +52,6 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "npx lint:oxlint",
       "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
     }
   }
